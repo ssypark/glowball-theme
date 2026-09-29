@@ -2,14 +2,22 @@
   Renders a product card matching the mockup's productCardHTML().
   Expects: product (object)
 {%- endcomment -%}
+{%- comment -%}
+  "Coming soon" = not for sale yet (tagged coming-soon, or no price set).
+  "Sold out" = a real product that's out of stock; keeps its price, can't be added.
+{%- endcomment -%}
 {%- assign p_soon = false -%}
-{%- unless product.available -%}{%- assign p_soon = true -%}{%- endunless -%}
+{%- if product.tags contains 'coming-soon' or product.price == 0 -%}{%- assign p_soon = true -%}{%- endif -%}
+{%- assign p_sold_out = false -%}
+{%- unless p_soon or product.available -%}{%- assign p_sold_out = true -%}{%- endunless -%}
 {%- assign is_multi = false -%}
 {%- if product.tags contains 'fleet-pack' -%}{%- assign is_multi = true -%}{%- endif -%}
 
 <div class="product-card">
   {%- if p_soon -%}
     <div class="badge badge-soon">Coming soon</div>
+  {%- elsif p_sold_out -%}
+    <div class="badge badge-soon">Sold out</div>
   {%- elsif product.compare_at_price > product.price -%}
     {%- assign save_amount = product.compare_at_price | minus: product.price | money_without_trailing_zeros -%}
     <div class="badge">Save {{ save_amount }}</div>
@@ -43,8 +51,8 @@
   </a>
   {%- if p_soon -%}
     <button class="add-btn" data-soon="true" aria-label="Notify me about {{ product.title }}">+</button>
-  {%- elsif product.has_only_default_variant == false -%}
-    <a class="add-btn" href="{{ product.url }}" aria-label="Choose options for {{ product.title }}">+</a>
+  {%- elsif p_sold_out or product.has_only_default_variant == false -%}
+    <a class="add-btn" href="{{ product.url }}" aria-label="View {{ product.title }}">+</a>
   {%- else -%}
     <button class="add-btn" data-variant-id="{{ product.selected_or_first_available_variant.id }}" aria-label="Add {{ product.title }} to cart">+</button>
   {%- endif -%}

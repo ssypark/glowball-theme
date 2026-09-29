@@ -1,5 +1,11 @@
+{%- comment -%}
+  "Coming soon" = not for sale yet (tagged coming-soon, or no price set).
+  "Sold out" = a real product that's out of stock; keeps its price, can't be added.
+{%- endcomment -%}
 {%- assign p_soon = false -%}
-{%- unless product.available -%}{%- assign p_soon = true -%}{%- endunless -%}
+{%- if product.tags contains 'coming-soon' or product.price == 0 -%}{%- assign p_soon = true -%}{%- endif -%}
+{%- assign p_sold_out = false -%}
+{%- unless p_soon or product.available -%}{%- assign p_sold_out = true -%}{%- endunless -%}
 {%- assign is_multi = false -%}
 {%- if product.tags contains 'fleet-pack' -%}{%- assign is_multi = true -%}{%- endif -%}
 {%- assign current_variant = product.selected_or_first_available_variant -%}
