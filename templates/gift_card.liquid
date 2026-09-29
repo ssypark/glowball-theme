@@ -1,0 +1,10 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Gift card</span><h2>{{ gift_card.initial_value | money_without_trailing_zeros }} GlowBall gift card</h2></div>
+  {%- if gift_card.expired or gift_card.enabled == false -%}
+    <p>This gift card is no longer active.</p>
+  {%- else -%}
+    <p>Balance: <b>{{ gift_card.balance | money }}</b></p>
+    <p>Code: <b class="sku">{{ gift_card.code | format_code }}</b></p>
+    <p style="margin-top:20px;"><a href="{{ shop.url }}" class="btn btn-solid">Shop the fleet</a></p>
+  {%- endif -%}
+</div>

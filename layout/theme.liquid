@@ -23,7 +23,7 @@
   <div class="nav-left">
     <a href="{{ routes.root_url }}" class="nav-logo"><img src="{{ 'logo.png' | asset_url }}" alt="">GLOWBALL</a>
     <ul class="nav-links">
-      <li><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" class="{% if template == 'collection' or template == 'product' or template == 'index' %}current{% endif %}">Shop</a></li>
+      <li><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" class="{% if template.name == 'collection' or template.name == 'product' or template.name == 'index' %}current{% endif %}">Shop</a></li>
       <li><a href="{{ routes.root_url }}#glows">Technology</a></li>
       <li><a href="{{ routes.root_url }}#missions">Custom Orders</a></li>
       <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
@@ -63,12 +63,12 @@
   </ul>
 </div>
 
-{% unless template == 'index' %}
+{% unless template.name == 'index' %}
 <div class="page-header">
   <div class="container">
     <div class="breadcrumb">
       <a href="{{ routes.root_url }}">Home</a><span class="sep">/</span>
-      {% if template == 'product' %}
+      {% if template.name == 'product' %}
       <a href="{{ routes.all_products_collection_url | default: '/collections/all' }}">Shop</a><span class="sep">/</span>
       <span class="current">{{ product.title }}</span>
       {% else %}

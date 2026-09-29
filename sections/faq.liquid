@@ -8,7 +8,7 @@
       {%- for block in section.blocks -%}
       <div class="faq-item{% if forloop.first %} open{% endif %}" {{ block.shopify_attributes }}>
         <button class="faq-q" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">{{ block.settings.question }} <span class="plus">+</span></button>
-        <div class="faq-a"><p>{{ block.settings.answer }}</p></div>
+        <div class="faq-a">{{ block.settings.answer }}</div>
       </div>
       {%- endfor -%}
     </div>

@@ -38,7 +38,7 @@
             {{ product.price | money_without_trailing_zeros }} <span class="unit">{% if is_multi %}9 balls &middot; $5/ea{% else %}sleeve of 3{% endif %}</span>
           {%- endif -%}
         </p>
-        <p class="pdp-desc">{{ product.description }}</p>
+        <div class="pdp-desc">{{ product.description }}</div>
 
         {%- if product.metafields.custom.bullets != blank -%}
         <ul class="pdp-bullets">

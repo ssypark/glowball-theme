@@ -1,13 +1,101 @@
 {
   "sections": {
-    "hero": { "type": "hero", "settings": {} },
-    "spec-bar": { "type": "spec-bar", "settings": {} },
-    "deployment-scenarios": { "type": "deployment-scenarios", "settings": {} },
-    "shop-grid": { "type": "shop-grid", "settings": {} },
-    "how-it-glows": { "type": "how-it-glows", "settings": {} },
-    "flight-logs": { "type": "flight-logs", "settings": {} },
-    "newsletter": { "type": "newsletter", "settings": {} },
-    "faq": { "type": "faq", "settings": {} }
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "spec-bar": {
+      "type": "spec-bar",
+      "settings": {}
+    },
+    "deployment-scenarios": {
+      "type": "deployment-scenarios",
+      "settings": {}
+    },
+    "shop-grid": {
+      "type": "shop-grid",
+      "settings": {}
+    },
+    "how-it-glows": {
+      "type": "how-it-glows",
+      "settings": {}
+    },
+    "flight-logs": {
+      "type": "flight-logs",
+      "settings": {},
+      "blocks": {
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Played until 10pm on a Tuesday. Never lost a ball. My playing partners think I'm cheating somehow.",
+            "attribution": "Weeknight golfer"
+          }
+        },
+        "testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Bought the multi-color pack for a bachelor party. Ended up being the best part of the whole weekend.",
+            "attribution": "Group outing organizer"
+          }
+        },
+        "testimonial-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Ordered branded sets for a client tournament. Looked far more premium than I expected for a novelty item.",
+            "attribution": "Corporate gifting buyer"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial-1",
+        "testimonial-2",
+        "testimonial-3"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {},
+      "blocks": {
+        "question-1": {
+          "type": "question",
+          "settings": {
+            "question": "How long do they actually glow?",
+            "answer": "<p>After a full charge under direct light, expect several hours of visible glow, brightest in the first hour and gradually fading. Exact duration depends on the charge source — confirm final numbers from your own testing before publishing them.</p>"
+          }
+        },
+        "question-2": {
+          "type": "question",
+          "settings": {
+            "question": "Can I recharge them?",
+            "answer": "<p>Yes — the photoluminescent core recharges under any light source, including sunlight, a phone flashlight, or a car headlight between holes.</p>"
+          }
+        },
+        "question-3": {
+          "type": "question",
+          "settings": {
+            "question": "Are they legal for tournament play?",
+            "answer": "<p>Weight, size and construction should match standard regulation golf balls, but conformance depends on final manufacturing. Verify against the current USGA/R&A equipment rules before making this claim publicly.</p>"
+          }
+        },
+        "question-4": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer wholesale or corporate orders?",
+            "answer": "<p>Yes — bulk pricing and custom branding are available for corporate gifting and tournaments. Reach out through the Custom Orders page to start a quote.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question-1",
+        "question-2",
+        "question-3",
+        "question-4"
+      ]
+    }
   },
   "order": [
     "hero",
