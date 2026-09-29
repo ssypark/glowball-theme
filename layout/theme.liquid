@@ -23,24 +23,28 @@
   <div class="nav-left">
     <a href="{{ routes.root_url }}" class="nav-logo"><img src="{{ 'logo.png' | asset_url }}" alt="">GLOWBALL</a>
     <ul class="nav-links">
-      <li><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" class="{% if template.name == 'collection' or template.name == 'product' or template.name == 'index' %}current{% endif %}">Shop</a></li>
-      <li><a href="{{ routes.root_url }}#glows">Technology</a></li>
-      <li><a href="{{ routes.root_url }}#missions">Custom Orders</a></li>
-      <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
-      <li><a href="#" aria-label="Wholesale (page not built in this mockup)">Wholesale</a></li>
+      {%- liquid
+        assign shop_current = ''
+        if template.name == 'collection' or template.name == 'product' or template.name == 'index'
+          assign shop_current = 'current'
+        endif
+      -%}
+      {%- render 'nav-links', current_class: shop_current -%}
     </ul>
   </div>
   <div class="nav-actions">
-    <button class="icon-btn" aria-label="Search">
+    <a href="{{ routes.search_url }}" class="icon-btn" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-    </button>
+    </a>
     <button class="icon-btn" id="cartOpenBtn" aria-label="Open cart">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4h2l2.2 12.2a2 2 0 0 0 2 1.8h8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg>
       <span class="cart-count" id="cartCount" data-empty="{% if cart.item_count == 0 %}true{% else %}false{% endif %}">{{ cart.item_count }}</span>
     </button>
-    <button class="icon-btn" aria-label="Account">
+    {%- if shop.customer_accounts_enabled -%}
+    <a href="{{ routes.account_url }}" class="icon-btn" aria-label="Account">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
-    </button>
+    </a>
+    {%- endif -%}
     <button class="icon-btn menu-toggle" id="menuOpenBtn" aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
     </button>
@@ -55,11 +59,7 @@
     </button>
   </div>
   <ul>
-    <li><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}">Shop</a></li>
-    <li><a href="{{ routes.root_url }}#glows">Technology</a></li>
-    <li><a href="{{ routes.root_url }}#missions">Custom Orders</a></li>
-    <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
-    <li><a href="#">Wholesale</a></li>
+    {%- render 'nav-links' -%}
   </ul>
 </div>
 
@@ -69,7 +69,7 @@
     <div class="breadcrumb">
       <a href="{{ routes.root_url }}">Home</a><span class="sep">/</span>
       {% if template.name == 'product' %}
-      <a href="{{ routes.all_products_collection_url | default: '/collections/all' }}">Shop</a><span class="sep">/</span>
+      <a href="{{ routes.all_products_collection_url }}">Shop</a><span class="sep">/</span>
       <span class="current">{{ product.title }}</span>
       {% else %}
       <span class="current">{{ page_title }}</span>
@@ -93,28 +93,30 @@
       <div class="footer-col">
         <h4>Shop</h4>
         <ul>
-          <li><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}">All colors</a></li>
-          <li><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}">Multi-color pack</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">All colors</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Multi-color pack</a></li>
           <li><a href="{{ routes.root_url }}#missions">Custom orders</a></li>
-          <li><a href="#">Wholesale</a></li>
+          {%- if pages['wholesale'].url != blank -%}<li><a href="{{ pages['wholesale'].url }}">Wholesale</a></li>{%- endif -%}
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#">About GlowBall</a></li>
+          {%- if pages['about'].url != blank -%}<li><a href="{{ pages['about'].url }}">About GlowBall</a></li>{%- endif -%}
           <li><a href="{{ routes.root_url }}#glows">Technology</a></li>
-          <li><a href="#">Journal</a></li>
-          <li><a href="#">Contact</a></li>
+          {%- if blogs['journal'].url != blank -%}<li><a href="{{ blogs['journal'].url }}">Journal</a></li>{%- endif -%}
+          {%- if pages['contact'].url != blank -%}<li><a href="{{ pages['contact'].url }}">Contact</a></li>{%- endif -%}
         </ul>
       </div>
       <div class="footer-col">
         <h4>Support</h4>
         <ul>
           <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
-          <li><a href="#">Shipping &amp; returns</a></li>
-          <li><a href="#">Track order</a></li>
-          <li><a href="#">Privacy policy</a></li>
+          {%- if shop.shipping_policy != blank -%}<li><a href="{{ shop.shipping_policy.url }}">Shipping</a></li>{%- endif -%}
+          {%- if shop.refund_policy != blank -%}<li><a href="{{ shop.refund_policy.url }}">Returns</a></li>{%- endif -%}
+          {%- if shop.customer_accounts_enabled -%}<li><a href="{{ routes.account_url }}">Track order</a></li>{%- endif -%}
+          {%- if shop.privacy_policy != blank -%}<li><a href="{{ shop.privacy_policy.url }}">Privacy policy</a></li>{%- endif -%}
+          {%- if shop.terms_of_service != blank -%}<li><a href="{{ shop.terms_of_service.url }}">Terms of service</a></li>{%- endif -%}
         </ul>
       </div>
     </div>
@@ -122,9 +124,9 @@
       <span>&copy; {{ 'now' | date: '%Y' }} GlowBall Industries &middot; Golf Systems Division</span>
       <span>Secure checkout &middot; Visa &middot; Mastercard &middot; Amex &middot; Shop Pay</span>
       <div class="footer-social">
-        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
-        <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4v9.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 4c.5 2.5 2 4 5 4"/></svg></a>
-        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l6 3-6 3z" fill="currentColor" stroke="none"/></svg></a>
+        {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>{%- endif -%}
+        {%- if settings.social_tiktok != blank -%}<a href="{{ settings.social_tiktok }}" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4v9.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 4c.5 2.5 2 4 5 4"/></svg></a>{%- endif -%}
+        {%- if settings.social_youtube != blank -%}<a href="{{ settings.social_youtube }}" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l6 3-6 3z" fill="currentColor" stroke="none"/></svg></a>{%- endif -%}
       </div>
     </div>
   </div>
@@ -142,7 +144,6 @@
   <div class="cart-foot">
     <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">$0</span></div>
     <a href="{{ routes.cart_url }}" class="btn btn-solid cart-checkout" id="checkoutBtn">Checkout</a>
-    <p class="cart-note">Cart is wired to Shopify's Ajax Cart API.</p>
   </div>
 </aside>
 

@@ -12,7 +12,9 @@
       </div>
       {%- endfor -%}
     </div>
-    <div class="faq-more"><a href="#">View the full FAQ &rarr;</a></div>
+    {%- if pages['faq'].url != blank -%}
+    <div class="faq-more"><a href="{{ pages['faq'].url }}">View the full FAQ &rarr;</a></div>
+    {%- endif -%}
   </div>
 </section>
 

@@ -32,7 +32,7 @@
       <span class="soon-tag">Coming soon</span>
       Got a logo? We'll put it on a ball &mdash;
       {%- assign custom_product = section.settings.custom_product -%}
-      <a href="{% if custom_product %}{{ custom_product.url }}{% else %}#{% endif %}">explore custom orders &rarr;</a>
+      <a href="{% if custom_product %}{{ custom_product.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">explore custom orders &rarr;</a>
     </p>
   </div>
 </section>

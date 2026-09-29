@@ -1,0 +1,16 @@
+{%- comment -%}
+  Star rating from Shopify's standard review metafields (reviews.rating / reviews.rating_count),
+  which review apps like Judge.me and Shopify Product Reviews populate.
+  Renders nothing until a product has at least one real review.
+  Expects: product (object), class (string)
+{%- endcomment -%}
+{%- assign rating = product.metafields.reviews.rating.value -%}
+{%- assign rating_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+{%- if rating != blank and rating_count > 0 -%}
+  {%- assign scale_max = rating.scale_max | round -%}
+  {%- assign filled = rating.rating | round -%}
+  <div class="{{ class }}" role="img" aria-label="Rated {{ rating.rating | round: 1 }} out of {{ scale_max }}, {{ rating_count }} reviews">
+    {%- for i in (1..scale_max) -%}{% if i <= filled %}★{% else %}☆{% endif %}{%- endfor -%}
+    <span class="rating-count">({{ rating_count }})</span>
+  </div>
+{%- endif -%}

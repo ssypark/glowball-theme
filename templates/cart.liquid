@@ -11,6 +11,7 @@
           {%- if item.image -%}<img src="{{ item.image | image_url: width: 112 }}" alt="">{%- endif -%}
           <div class="cart-item-info">
             <h4>{{ item.product.title }}</h4>
+            {%- unless item.product.has_only_default_variant -%}<span class="sku">{{ item.variant.title }}</span>{%- endunless -%}
             <span class="sku">{{ item.variant.sku }}</span>
             {%- if item.properties.size > 0 -%}
               {%- for prop in item.properties -%}

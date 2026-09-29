@@ -1,12 +1,24 @@
 <div class="container section-pad-sm">
-  <div class="section-head"><span class="eyebrow">Search</span><h2>Search results</h2></div>
-  {%- paginate search.results by 12 -%}
-  <div class="product-grid">
-    {%- for item in search.results -%}
-      {%- if item.object_type == 'product' -%}
-        {%- render 'product-card', product: item -%}
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-  {%- endpaginate -%}
+  <div class="section-head"><span class="eyebrow">Search</span><h2>{% if search.performed %}Results for &ldquo;{{ search.terms | escape }}&rdquo;{% else %}Search the fleet{% endif %}</h2></div>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="signup-form search-form">
+    <input type="hidden" name="type" value="product">
+    <label for="searchInput" class="visually-hidden">Search products</label>
+    <input type="search" id="searchInput" name="q" value="{{ search.terms | escape }}" placeholder="Search products">
+    <button type="submit" class="btn btn-solid">Search</button>
+  </form>
+  {%- if search.performed -%}
+    {%- paginate search.results by 12 -%}
+    {%- if search.results_count == 0 -%}
+      <p class="search-empty">Nothing on the radar for that search. Try a color, like &ldquo;green&rdquo;.</p>
+    {%- else -%}
+    <div class="product-grid">
+      {%- for item in search.results -%}
+        {%- if item.object_type == 'product' -%}
+          {%- render 'product-card', product: item -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+    {%- endpaginate -%}
+  {%- endif -%}
 </div>

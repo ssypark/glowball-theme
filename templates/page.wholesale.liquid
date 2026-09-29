@@ -1,0 +1,25 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Wholesale &amp; corporate</span><h2>{{ page.title }}</h2></div>
+  {%- if page.content != blank -%}
+    <div class="pdp-desc page-intro">{{ page.content }}</div>
+  {%- endif -%}
+  {%- form 'contact', class: 'contact-form' -%}
+    <input type="hidden" name="contact[Inquiry type]" value="Wholesale">
+    {%- if form.posted_successfully? -%}
+      <p class="form-status" role="status">Quote request received. We'll follow up with pricing within two business days.</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <p class="form-error" role="alert">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+    <div class="field-row">
+      <label class="field"><span>Name</span><input type="text" name="contact[name]" autocomplete="name" required value="{{ form.name }}"></label>
+      <label class="field"><span>Email</span><input type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></label>
+    </div>
+    <div class="field-row">
+      <label class="field"><span>Company or course</span><input type="text" name="contact[Company]" autocomplete="organization"></label>
+      <label class="field"><span>Estimated quantity (sleeves)</span><input type="text" name="contact[Quantity]" inputmode="numeric"></label>
+    </div>
+    <label class="field"><span>What are you planning?</span><textarea name="contact[body]" rows="5" placeholder="Pro shop resale, tournament swag, client gifts, custom logos…">{{ form.body }}</textarea></label>
+    <button type="submit" class="btn btn-solid">Request a quote</button>
+  {%- endform -%}
+</div>

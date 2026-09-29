@@ -273,7 +273,6 @@ section{ position:relative; z-index:1; }
 }
 .signup-form input:focus{ border-color:var(--electric-cyan); outline:none; }
 .signup-form input::placeholder{ color:var(--gray-dim); }
-.signup-note{ margin-top:14px; font-family:var(--font-mono); font-size:10.5px; color:var(--gray-dim); }
 .form-status{ margin-top:14px; font-family:var(--font-mono); font-size:12px; color:var(--glow-green); min-height:16px; }
 
 /* ===== FAQ ===== */
@@ -338,6 +337,8 @@ section{ position:relative; z-index:1; }
 }
 .logo-upload input[type="file"]::file-selector-button:hover{ border-color:var(--electric-cyan); color:var(--electric-cyan); }
 .logo-note{ margin-top:10px; font-family:var(--font-mono); font-size:10.5px; color:var(--gray-dim); line-height:1.5; }
+.variant-picker{ display:flex; gap:14px; flex-wrap:wrap; }
+.variant-picker .field{ flex:1; min-width:160px; }
 .pdp-meta-row{ margin-top:24px; display:flex; flex-direction:column; gap:8px; font-family:var(--font-mono); font-size:11.5px; color:var(--gray-dim); }
 .pdp-meta-row span b{ color:var(--gray); }
 .related{ background:var(--black); border-top:1px solid var(--line); }
@@ -391,7 +392,6 @@ footer{ background:var(--graphite); border-top:1px solid var(--line); padding:64
 .cart-foot{ border-top:1px solid var(--line); padding:20px 24px 26px; }
 .cart-subtotal{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:14px; margin-bottom:16px; }
 .cart-checkout{ width:100%; text-align:center; }
-.cart-note{ text-align:center; font-family:var(--font-mono); font-size:10px; color:var(--gray-dim); margin-top:10px; }
 
 .visually-hidden{ position:absolute; left:-9999px; }
 
@@ -400,3 +400,24 @@ footer{ background:var(--graphite); border-top:1px solid var(--line); padding:64
   .star, .range-ball, .scroll-cue .line{ animation:none !important; }
   .product-card, .product-photo img, .add-btn, .btn, .icon-btn, .cart-drawer, .overlay, .mobile-menu, .faq-a{ transition:none !important; }
 }
+
+/* ===== FORMS (contact, wholesale, search, variant picker) ===== */
+.field{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.field > span{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); }
+.field input, .field textarea, .field select{
+  background:var(--graphite); border:1px solid var(--line); color:var(--white);
+  padding:13px 14px; font-family:var(--font-body); font-size:14px; width:100%;
+}
+.field select{ cursor:pointer; }
+.field textarea{ resize:vertical; }
+.field input:focus, .field textarea:focus, .field select:focus{ border-color:var(--electric-cyan); outline:none; }
+.field-row{ display:flex; gap:16px; flex-wrap:wrap; }
+.field-row .field{ flex:1; min-width:220px; }
+.contact-form{ max-width:640px; margin-top:32px; }
+.contact-form .form-status{ margin:0 0 20px; }
+.form-error{ margin-bottom:20px; font-family:var(--font-mono); font-size:12px; color:var(--signal-orange); }
+.page-intro{ max-width:640px; margin-top:0; }
+.search-form{ justify-content:flex-start; max-width:640px; margin-bottom:48px; }
+.search-empty{ color:var(--gray); font-size:14.5px; }
+.rating-count{ margin-left:6px; font-family:var(--font-mono); font-size:11px; color:var(--gray-dim); letter-spacing:0; }
+a.add-btn{ text-decoration:none; }

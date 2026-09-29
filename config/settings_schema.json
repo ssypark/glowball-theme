@@ -12,5 +12,14 @@
     "settings": [
       { "type": "header", "content": "Brand palette (reference only — colors are hard-coded in site.css to match the approved mockup)" }
     ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "paragraph", "content": "Footer icons only appear for accounts with a link filled in." },
+      { "type": "url", "id": "social_instagram", "label": "Instagram" },
+      { "type": "url", "id": "social_tiktok", "label": "TikTok" },
+      { "type": "url", "id": "social_youtube", "label": "YouTube" }
+    ]
   }
 ]

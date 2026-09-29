@@ -1,0 +1,20 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Open a channel</span><h2>{{ page.title }}</h2></div>
+  {%- if page.content != blank -%}
+    <div class="pdp-desc page-intro">{{ page.content }}</div>
+  {%- endif -%}
+  {%- form 'contact', class: 'contact-form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="form-status" role="status">Transmission received. We'll get back to you within one business day.</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <p class="form-error" role="alert">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+    <div class="field-row">
+      <label class="field"><span>Name</span><input type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}"></label>
+      <label class="field"><span>Email</span><input type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}"></label>
+    </div>
+    <label class="field"><span>Message</span><textarea name="contact[body]" rows="6" required>{{ form.body }}</textarea></label>
+    <button type="submit" class="btn btn-solid">Send message</button>
+  {%- endform -%}
+</div>

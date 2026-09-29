@@ -28,7 +28,7 @@
       {%- endif -%}
     </div>
     <div class="product-info">
-      {%- unless p_soon -%}<div class="product-stars" aria-hidden="true">★★★★★</div>{%- endunless -%}
+      {%- unless p_soon -%}{%- render 'rating-stars', product: product, class: 'product-stars' -%}{%- endunless -%}
       <h3>{{ product.title }}</h3>
       <p class="product-sku">{% if p_soon %}Upload a logo or mark{% else %}{{ product.selected_or_first_available_variant.sku | default: product.handle | upcase }}{% endif %}</p>
       <p class="product-desc">{{ product.description | strip_html | truncatewords: 14 }}</p>
@@ -43,6 +43,8 @@
   </a>
   {%- if p_soon -%}
     <button class="add-btn" data-soon="true" aria-label="Notify me about {{ product.title }}">+</button>
+  {%- elsif product.has_only_default_variant == false -%}
+    <a class="add-btn" href="{{ product.url }}" aria-label="Choose options for {{ product.title }}">+</a>
   {%- else -%}
     <button class="add-btn" data-variant-id="{{ product.selected_or_first_available_variant.id }}" aria-label="Add {{ product.title }} to cart">+</button>
   {%- endif -%}

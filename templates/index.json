@@ -50,7 +50,8 @@
         "testimonial-1",
         "testimonial-2",
         "testimonial-3"
-      ]
+      ],
+      "disabled": true
     },
     "newsletter": {
       "type": "newsletter",

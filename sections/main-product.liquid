@@ -2,6 +2,7 @@
 {%- unless product.available -%}{%- assign p_soon = true -%}{%- endunless -%}
 {%- assign is_multi = false -%}
 {%- if product.tags contains 'fleet-pack' -%}{%- assign is_multi = true -%}{%- endif -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
 
 <section class="pdp section-pad-sm" id="pdpRoot">
   <div class="container">
@@ -29,13 +30,13 @@
       <div class="pdp-info">
         <span class="eyebrow">{% if is_multi %}Fleet pack{% elsif p_soon %}In development{% else %}GB-1 MK.II{% endif %}</span>
         <h1>{{ product.title }}</h1>
-        <p class="pdp-sku">{% if p_soon %}Upload a logo or mark{% else %}{{ product.selected_or_first_available_variant.sku }}{% endif %}</p>
-        {%- unless p_soon -%}<div class="pdp-stars" aria-hidden="true">★★★★★</div>{%- endunless -%}
+        <p class="pdp-sku" id="pdpSku">{% if p_soon %}Upload a logo or mark{% else %}{{ current_variant.sku }}{% endif %}</p>
+        {%- unless p_soon -%}{%- render 'rating-stars', product: product, class: 'pdp-stars' -%}{%- endunless -%}
         <p class="pdp-price">
           {%- if p_soon -%}
             TBD <span class="unit">notify me</span>
           {%- else -%}
-            {{ product.price | money_without_trailing_zeros }} <span class="unit">{% if is_multi %}9 balls &middot; $5/ea{% else %}sleeve of 3{% endif %}</span>
+            <span id="pdpPrice">{{ current_variant.price | money_without_trailing_zeros }}</span> <span class="unit">{% if is_multi %}9 balls &middot; $5/ea{% else %}sleeve of 3{% endif %}</span>
           {%- endif -%}
         </p>
         <div class="pdp-desc">{{ product.description }}</div>
@@ -52,18 +53,38 @@
           {%- if p_soon -%}
             <button class="btn btn-solid btn-block" id="pdpNotifyBtn" type="button">Notify me at launch</button>
           {%- else -%}
+            {%- unless product.has_only_default_variant -%}
+            <div class="variant-picker" id="pdpVariantPicker">
+              {%- for option in product.options_with_values -%}
+              <label class="field">
+                <span>{{ option.name }}</span>
+                <select data-option-position="{{ option.position }}">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}"{% if option.selected_value == value %} selected{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              </label>
+              {%- endfor -%}
+            </div>
+            <script type="application/json" id="pdpVariantData">{{ product.variants | json }}</script>
+            {%- endunless -%}
+
+            {%- comment -%}
+              The logo option only appears when a purchasable "custom-logo-add-on" product exists,
+              so the upcharge is always added to the cart alongside the logo request.
+            {%- endcomment -%}
             {%- assign logo_addon = all_products['custom-logo-add-on'] -%}
+            {%- if logo_addon.available -%}
             <div class="logo-option-block">
               <label class="logo-option">
                 <input type="checkbox" id="pdpLogoToggle">
                 <span>Add a custom logo {% if logo_addon %}<span class="addon-price">+{{ logo_addon.price | money_without_trailing_zeros }}/sleeve</span>{% endif %}</span>
               </label>
               <div class="logo-upload" id="logoUploadRow" hidden>
-                <label for="pdpLogoFile" class="visually-hidden">Upload logo file</label>
-                <input type="file" id="pdpLogoFile" accept="image/*,.pdf,.ai,.eps" disabled>
-                <p class="logo-note">PNG, SVG, PDF or vector file. Real file upload at checkout requires a customization app (e.g. Zakeke, Bold Product Options) &mdash; not wired in this preview. For now, checking this box adds a line-item note asking the customer to email their logo.</p>
+                <p class="logo-note">After you order, email your logo (PNG, SVG, PDF or vector file) to {{ shop.email }}. We'll send a proof before anything is printed.</p>
               </div>
             </div>
+            {%- endif -%}
             <div class="pdp-buybox-row">
               <div class="qty-stepper">
                 <button type="button" id="pdpQtyDec" aria-label="Decrease quantity">&minus;</button>
@@ -71,9 +92,10 @@
                 <button type="button" id="pdpQtyInc" aria-label="Increase quantity">+</button>
               </div>
               <button class="btn btn-solid" id="pdpAddBtn" type="button"
-                data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-                data-addon-variant-id="{{ logo_addon.selected_or_first_available_variant.id }}"
-                data-product-name="{{ product.title | escape }}">Add to cart</button>
+                data-variant-id="{{ current_variant.id }}"
+                data-addon-variant-id="{% if logo_addon.available %}{{ logo_addon.selected_or_first_available_variant.id }}{% endif %}"
+                data-product-name="{{ product.title | escape }}"
+                {% unless current_variant.available %}disabled{% endunless %}>{% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}</button>
             </div>
           {%- endif -%}
         </div>

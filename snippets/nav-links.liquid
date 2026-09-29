@@ -1,0 +1,12 @@
+{%- comment -%}
+  Primary nav items, shared by the desktop nav and the mobile menu.
+  Expects: current_class (string, optional) — class added to the Shop link on shop pages
+  Wholesale only shows once a page with the handle "wholesale" exists.
+{%- endcomment -%}
+<li><a href="{{ routes.all_products_collection_url }}" class="{{ current_class }}">Shop</a></li>
+<li><a href="{{ routes.root_url }}#glows">Technology</a></li>
+<li><a href="{{ routes.root_url }}#missions">Custom Orders</a></li>
+<li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
+{%- if pages['wholesale'].url != blank -%}
+<li><a href="{{ pages['wholesale'].url }}">Wholesale</a></li>
+{%- endif -%}
