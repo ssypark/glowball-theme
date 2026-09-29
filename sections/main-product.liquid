@@ -7,7 +7,8 @@
 {%- assign p_sold_out = false -%}
 {%- unless p_soon or product.available -%}{%- assign p_sold_out = true -%}{%- endunless -%}
 {%- assign is_multi = false -%}
-{%- if product.tags contains 'fleet-pack' -%}{%- assign is_multi = true -%}{%- endif -%}
+{%- if product.tags contains 'fleet-pack' or product.handle contains 'fleet' or product.handle contains 'multi' -%}{%- assign is_multi = true -%}{%- endif -%}
+{%- assign per_ball = product.price | divided_by: 9 -%}
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 
 <section class="pdp section-pad-sm" id="pdpRoot">
@@ -42,7 +43,7 @@
           {%- if p_soon -%}
             TBD <span class="unit">notify me</span>
           {%- else -%}
-            <span id="pdpPrice">{{ current_variant.price | money_without_trailing_zeros }}</span> <span class="unit">{% if is_multi %}9 balls &middot; $5/ea{% else %}sleeve of 3{% endif %}</span>
+            <span id="pdpPrice">{{ current_variant.price | money_without_trailing_zeros }}</span> <span class="unit">{% if is_multi %}9 balls &middot; {{ per_ball | money_without_trailing_zeros }}/ea{% else %}sleeve of 3{% endif %}</span>
           {%- endif -%}
         </p>
         <div class="pdp-desc">{{ product.description }}</div>

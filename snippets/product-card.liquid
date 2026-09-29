@@ -11,7 +11,8 @@
 {%- assign p_sold_out = false -%}
 {%- unless p_soon or product.available -%}{%- assign p_sold_out = true -%}{%- endunless -%}
 {%- assign is_multi = false -%}
-{%- if product.tags contains 'fleet-pack' -%}{%- assign is_multi = true -%}{%- endif -%}
+{%- if product.tags contains 'fleet-pack' or product.handle contains 'fleet' or product.handle contains 'multi' -%}{%- assign is_multi = true -%}{%- endif -%}
+{%- assign per_ball = product.price | divided_by: 9 -%}
 
 <div class="product-card">
   {%- if p_soon -%}
@@ -44,7 +45,7 @@
         {%- if p_soon -%}
           <span class="price">TBD</span><span class="price-unit">notify me</span>
         {%- else -%}
-          <span class="price">{{ product.price | money_without_trailing_zeros }}</span><span class="price-unit">{% if is_multi %}9 balls &middot; $5/ea{% else %}sleeve of 3{% endif %}</span>
+          <span class="price">{{ product.price | money_without_trailing_zeros }}</span><span class="price-unit">{% if is_multi %}9 balls &middot; {{ per_ball | money_without_trailing_zeros }}/ea{% else %}sleeve of 3{% endif %}</span>
         {%- endif -%}
       </div>
     </div>
