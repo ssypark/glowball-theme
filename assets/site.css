@@ -49,7 +49,10 @@ p{ margin:0; }
   padding:18px clamp(20px,4vw,48px);
   background:linear-gradient(rgba(30,30,30,.9), rgba(30,30,30,.55) 70%, transparent);
   backdrop-filter:blur(2px);
+  transition:background .25s ease, border-color .25s ease;
+  border-bottom:1px solid transparent;
 }
+.topnav.scrolled{ background:rgba(21,21,25,.96); backdrop-filter:blur(8px); border-bottom-color:var(--line); }
 .nav-left{ display:flex; align-items:center; gap:36px; }
 .nav-logo{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:15px; letter-spacing:.12em; text-decoration:none; color:var(--white); }
 .nav-logo img{ width:24px; height:24px; object-fit:contain; filter:invert(1); }

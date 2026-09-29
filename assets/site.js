@@ -155,6 +155,15 @@
     });
   }
 
+  // ---------- nav: solid background once the page scrolls ----------
+  function initNavScroll(){
+    var nav = document.querySelector('.topnav');
+    if(!nav) return;
+    function update(){ nav.classList.toggle('scrolled', window.scrollY > 40); }
+    window.addEventListener('scroll', update, { passive:true });
+    update();
+  }
+
   // ---------- FAQ accordion ----------
   function initFAQ(){
     var items = document.querySelectorAll('.faq-q');
@@ -350,6 +359,7 @@
     window.__glowballCartDrawer = drawer;
     initAddButtons(drawer);
     initMobileMenu();
+    initNavScroll();
     initFAQ();
     initHeroAnimation();
     initHeroScroll();
