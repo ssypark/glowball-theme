@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "hero": { "type": "hero", "settings": {} },
+    "spec-bar": { "type": "spec-bar", "settings": {} },
+    "deployment-scenarios": { "type": "deployment-scenarios", "settings": {} },
+    "shop-grid": { "type": "shop-grid", "settings": {} },
+    "how-it-glows": { "type": "how-it-glows", "settings": {} },
+    "flight-logs": { "type": "flight-logs", "settings": {} },
+    "newsletter": { "type": "newsletter", "settings": {} },
+    "faq": { "type": "faq", "settings": {} }
+  },
+  "order": [
+    "hero",
+    "spec-bar",
+    "deployment-scenarios",
+    "shop-grid",
+    "how-it-glows",
+    "flight-logs",
+    "newsletter",
+    "faq"
+  ]
+}

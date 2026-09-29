@@ -1,0 +1,41 @@
+<section class="logs section-pad">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Flight logs</span>
+      <h2>From the field</h2>
+    </div>
+    <div class="log-grid">
+      {%- for block in section.blocks -%}
+      <div class="log-card" {{ block.shopify_attributes }}>
+        <div class="log-stars" aria-hidden="true">★★★★★</div>
+        <p class="log-quote">"{{ block.settings.quote }}"</p>
+        <p class="log-meta">SAMPLE REVIEW &mdash; {{ block.settings.attribution }}, replace before launch</p>
+      </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Flight logs",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "attribution", "label": "Attribution" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "testimonial", "settings": { "quote": "Played until 10pm on a Tuesday. Never lost a ball. My playing partners think I'm cheating somehow.", "attribution": "Weeknight golfer" } },
+      { "type": "testimonial", "settings": { "quote": "Bought the multi-color pack for a bachelor party. Ended up being the best part of the whole weekend.", "attribution": "Group outing organizer" } },
+      { "type": "testimonial", "settings": { "quote": "Ordered branded sets for a client tournament. Looked far more premium than I expected for a novelty item.", "attribution": "Corporate gifting buyer" } }
+    ]
+  }
+}
+{% endschema %}

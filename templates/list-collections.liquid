@@ -1,0 +1,13 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Browse</span><h2>Collections</h2></div>
+  <div class="product-grid">
+    {%- for collection in collections -%}
+      <div class="product-card">
+        <a class="product-card-link" href="{{ collection.url }}">
+          <div class="product-photo">{%- if collection.image -%}<img src="{{ collection.image | image_url: width: 600 }}" alt="{{ collection.title }}">{%- endif -%}</div>
+          <div class="product-info"><h3>{{ collection.title }}</h3></div>
+        </a>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="container section-pad-sm">
+{%- form 'customer_login' -%}
+  <div class="section-head"><h2>Login</h2></div>
+  <label>Email<br><input type="email" name="customer[email]" required></label><br><br>
+  {%- if form.password_needed -%}<label>Password<br><input type="password" name="customer[password]" required></label><br><br>{%- endif -%}
+  <button type="submit" class="btn btn-solid">Sign in</button>
+{%- endform -%}
+</div>

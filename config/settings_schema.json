@@ -1,0 +1,16 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "GlowBall Industries",
+    "theme_version": "1.0.0",
+    "theme_author": "GlowBall Industries",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Brand palette (reference only — colors are hard-coded in site.css to match the approved mockup)" }
+    ]
+  }
+]

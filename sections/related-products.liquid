@@ -1,0 +1,21 @@
+<section class="related section-pad">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Also in the fleet</span>
+      <h2>You might also like</h2>
+    </div>
+    <div class="product-grid" id="relatedGrid">
+      {%- assign shown = 0 -%}
+      {%- for p in collections.all.products -%}
+        {%- if p.handle != product.handle and p.handle != 'custom-logo-add-on' and shown < 4 -%}
+          {%- render 'product-card', product: p -%}
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Related products", "settings": [] }
+{% endschema %}

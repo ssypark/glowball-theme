@@ -1,0 +1,32 @@
+<section class="shop section-pad" id="shop">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Current deployments</span>
+      <h2>Shop the GB-1 fleet</h2>
+    </div>
+    <div class="product-grid" id="productGrid">
+      {%- if section.settings.collection != blank -%}
+        {%- for product in section.settings.collection.products -%}
+          {%- unless product.handle == 'custom-logo-add-on' -%}
+            {%- render 'product-card', product: product -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for product in collections.all.products limit: 8 -%}
+          {%- unless product.handle == 'custom-logo-add-on' -%}
+            {%- render 'product-card', product: product -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shop grid",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection to display" }
+  ]
+}
+{% endschema %}

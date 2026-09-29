@@ -1,0 +1,23 @@
+<section class="mission-control section-pad">
+  <div class="container">
+    <span class="eyebrow">Transmission signup</span>
+    <h2>Join mission control</h2>
+    <p>Early access to new colors, custom orders, and the occasional dispatch from the Golf Systems Division. No spam &mdash; we ship this to Klaviyo, not a junk drawer.</p>
+    {%- form 'customer', class: 'signup-form-wrap' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="signup-form">
+        <label for="signupEmail" class="visually-hidden">Email address</label>
+        <input type="email" id="signupEmail" name="contact[email]" placeholder="you@example.com" required autocomplete="email">
+        <button type="submit" class="btn btn-solid">Sign up</button>
+      </div>
+      {%- if form.posted_successfully? -%}
+        <p class="form-status" role="status">Transmission received. Welcome to mission control.</p>
+      {%- endif -%}
+    {%- endform -%}
+    <p class="signup-note">Uses Shopify's customer signup form &mdash; connect a Klaviyo integration at launch to route these into Klaviyo lists.</p>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Newsletter", "settings": [] }
+{% endschema %}

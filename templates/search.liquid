@@ -1,0 +1,12 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Search</span><h2>Search results</h2></div>
+  {%- paginate search.results by 12 -%}
+  <div class="product-grid">
+    {%- for item in search.results -%}
+      {%- if item.object_type == 'product' -%}
+        {%- render 'product-card', product: item -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  {%- endpaginate -%}
+</div>

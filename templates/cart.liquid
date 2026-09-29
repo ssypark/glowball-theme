@@ -1,0 +1,32 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Checkout</span><h2>Your cart</h2></div>
+  {%- if cart.item_count == 0 -%}
+    <p class="cart-empty">Your cart is empty. The fairway is dark &mdash; go fix that.</p>
+    <p style="margin-top:20px;"><a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" class="btn btn-solid">Shop the fleet</a></p>
+  {%- else -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <div class="cart-items" style="max-height:none;overflow:visible;">
+        {%- for item in cart.items -%}
+        <div class="cart-item">
+          {%- if item.image -%}<img src="{{ item.image | image_url: width: 112 }}" alt="">{%- endif -%}
+          <div class="cart-item-info">
+            <h4>{{ item.product.title }}</h4>
+            <span class="sku">{{ item.variant.sku }}</span>
+            {%- if item.properties.size > 0 -%}
+              {%- for prop in item.properties -%}
+                {%- unless prop.last == blank -%}<span class="sku">{{ prop.first }}: {{ prop.last }}</span>{%- endunless -%}
+              {%- endfor -%}
+            {%- endif -%}
+            <div class="qty-row"><span class="qty-val">Qty {{ item.quantity }}</span></div>
+          </div>
+          <span class="cart-item-price">{{ item.final_line_price | money }}</span>
+        </div>
+        {%- endfor -%}
+      </div>
+      <div class="cart-foot" style="border-top:1px solid var(--line);margin-top:20px;padding:20px 0;">
+        <div class="cart-subtotal"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+        <button type="submit" name="checkout" class="btn btn-solid cart-checkout">Checkout</button>
+      </div>
+    </form>
+  {%- endif -%}
+</div>

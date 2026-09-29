@@ -1,0 +1,47 @@
+<section class="missions section-pad" id="missions">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Deployment scenarios</span>
+      <h2>Built for whatever's on the tee sheet</h2>
+    </div>
+  </div>
+  <div class="mission-grid">
+    <div class="mission-card">
+      <span class="mission-tag">Operation: Night Round</span>
+      <h3>After-dark golfers</h3>
+      <p>For the group that plays until the course kicks them off &mdash; and then keeps going in the backyard.</p>
+    </div>
+    <div class="mission-card">
+      <span class="mission-tag">Operation: Last Call</span>
+      <h3>Bachelor &amp; group outings</h3>
+      <p>Glow-in-the-dark rounds are the rare group activity nobody complains about joining.</p>
+    </div>
+    <div class="mission-card">
+      <span class="mission-tag">Operation: Deployment</span>
+      <h3>Corporate gifting</h3>
+      <p>Branded sleeves for client gifts, tournament swag, and the golfer on your team who has everything.</p>
+    </div>
+    <div class="mission-card">
+      <span class="mission-tag">Operation: Gift Drop</span>
+      <h3>Holidays &amp; novelty gifts</h3>
+      <p>Father's Day, stocking stuffers, white elephant &mdash; the rare gift that gets used the same week.</p>
+    </div>
+  </div>
+  <div class="container">
+    <p class="custom-cta-line">
+      <span class="soon-tag">Coming soon</span>
+      Got a logo? We'll put it on a ball &mdash;
+      {%- assign custom_product = section.settings.custom_product -%}
+      <a href="{% if custom_product %}{{ custom_product.url }}{% else %}#{% endif %}">explore custom orders &rarr;</a>
+    </p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Deployment scenarios",
+  "settings": [
+    { "type": "product", "id": "custom_product", "label": "Custom orders product (links the CTA line)" }
+  ]
+}
+{% endschema %}

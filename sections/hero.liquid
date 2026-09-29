@@ -1,0 +1,24 @@
+<div id="top"></div>
+<header class="hero" id="hero">
+  <div class="range-bg" id="rangeBg"></div>
+  <div class="hero-ring"><img src="{{ 'logo.png' | asset_url }}" alt="GlowBall Industries orbital mark"></div>
+  <h1>{{ section.settings.heading | default: 'GLOWBALL INDUSTRIES' }}</h1>
+  <p class="hero-sub">{{ section.settings.subheading | default: 'GB-1 MK.II · Certified for night flight' }}</p>
+  <p class="hero-copy">{{ section.settings.copy | default: "Photoluminescent golf systems engineered so the round doesn't end when the sun does. Charge it in daylight, tee off after dark." }}</p>
+  <div class="hero-ctas">
+    <a href="{{ section.settings.shop_anchor | default: '#shop' }}" class="btn btn-solid">Shop the fleet</a>
+    <a href="#glows" class="btn btn-ghost">How it glows</a>
+  </div>
+  <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
+</header>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "GLOWBALL INDUSTRIES" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "GB-1 MK.II · Certified for night flight" },
+    { "type": "textarea", "id": "copy", "label": "Copy", "default": "Photoluminescent golf systems engineered so the round doesn't end when the sun does. Charge it in daylight, tee off after dark." }
+  ]
+}
+{% endschema %}

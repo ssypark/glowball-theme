@@ -1,0 +1,93 @@
+{%- assign p_soon = false -%}
+{%- unless product.available -%}{%- assign p_soon = true -%}{%- endunless -%}
+{%- assign is_multi = false -%}
+{%- if product.tags contains 'fleet-pack' -%}{%- assign is_multi = true -%}{%- endif -%}
+
+<section class="pdp section-pad-sm" id="pdpRoot">
+  <div class="container">
+    <div class="pdp-grid">
+      <div class="pdp-gallery">
+        <div class="pdp-gallery-main" id="pdpMainImg">
+          {%- if is_multi -%}
+            <div class="multi-swatch" style="background:conic-gradient(from 0deg, var(--white) 0deg 120deg, var(--neon-magenta) 120deg 240deg, var(--glow-green) 240deg 360deg);"></div>
+          {%- elsif product.featured_image -%}
+            <img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.featured_image.alt | default: product.title }}" width="900" height="900">
+          {%- else -%}
+            <div class="dashed" style="position:absolute;inset:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="width:48px;height:48px;"><path d="M12 3l2.3 5.5L20 10l-4.5 3.7L17 20l-5-3-5 3 1.5-6.3L4 10l5.7-1.5L12 3z"/></svg></div>
+          {%- endif -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+        <div class="pdp-thumbs" id="pdpThumbs">
+          {%- for image in product.images -%}
+          <button class="pdp-thumb{% if forloop.first %} active{% endif %}" data-full="{{ image | image_url: width: 900 }}" aria-label="Show photo {{ forloop.index }}">
+            <img src="{{ image | image_url: width: 120 }}" alt="">
+          </button>
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
+      </div>
+      <div class="pdp-info">
+        <span class="eyebrow">{% if is_multi %}Fleet pack{% elsif p_soon %}In development{% else %}GB-1 MK.II{% endif %}</span>
+        <h1>{{ product.title }}</h1>
+        <p class="pdp-sku">{% if p_soon %}Upload a logo or mark{% else %}{{ product.selected_or_first_available_variant.sku }}{% endif %}</p>
+        {%- unless p_soon -%}<div class="pdp-stars" aria-hidden="true">★★★★★</div>{%- endunless -%}
+        <p class="pdp-price">
+          {%- if p_soon -%}
+            TBD <span class="unit">notify me</span>
+          {%- else -%}
+            {{ product.price | money_without_trailing_zeros }} <span class="unit">{% if is_multi %}9 balls &middot; $5/ea{% else %}sleeve of 3{% endif %}</span>
+          {%- endif -%}
+        </p>
+        <p class="pdp-desc">{{ product.description }}</p>
+
+        {%- if product.metafields.custom.bullets != blank -%}
+        <ul class="pdp-bullets">
+          {%- for line in product.metafields.custom.bullets.value -%}
+            <li>{{ line }}</li>
+          {%- endfor -%}
+        </ul>
+        {%- endif -%}
+
+        <div class="pdp-buybox" id="pdpBuybox">
+          {%- if p_soon -%}
+            <button class="btn btn-solid btn-block" id="pdpNotifyBtn" type="button">Notify me at launch</button>
+          {%- else -%}
+            {%- assign logo_addon = all_products['custom-logo-add-on'] -%}
+            <div class="logo-option-block">
+              <label class="logo-option">
+                <input type="checkbox" id="pdpLogoToggle">
+                <span>Add a custom logo {% if logo_addon %}<span class="addon-price">+{{ logo_addon.price | money_without_trailing_zeros }}/sleeve</span>{% endif %}</span>
+              </label>
+              <div class="logo-upload" id="logoUploadRow" hidden>
+                <label for="pdpLogoFile" class="visually-hidden">Upload logo file</label>
+                <input type="file" id="pdpLogoFile" accept="image/*,.pdf,.ai,.eps" disabled>
+                <p class="logo-note">PNG, SVG, PDF or vector file. Real file upload at checkout requires a customization app (e.g. Zakeke, Bold Product Options) &mdash; not wired in this preview. For now, checking this box adds a line-item note asking the customer to email their logo.</p>
+              </div>
+            </div>
+            <div class="pdp-buybox-row">
+              <div class="qty-stepper">
+                <button type="button" id="pdpQtyDec" aria-label="Decrease quantity">&minus;</button>
+                <span class="qty-display" id="pdpQtyDisplay">1</span>
+                <button type="button" id="pdpQtyInc" aria-label="Increase quantity">+</button>
+              </div>
+              <button class="btn btn-solid" id="pdpAddBtn" type="button"
+                data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                data-addon-variant-id="{{ logo_addon.selected_or_first_available_variant.id }}"
+                data-product-name="{{ product.title | escape }}">Add to cart</button>
+            </div>
+          {%- endif -%}
+        </div>
+        <p class="pdp-added-msg" id="pdpAddedMsg" role="status" aria-live="polite"></p>
+
+        <div class="pdp-meta-row">
+          <span><b>Shipping:</b> free on orders $50+, ships direct within 2&ndash;4 business days*</span>
+          <span><b>Returns:</b> 30-night guarantee &mdash; lost it in the rough, we'll replace it*</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Product", "settings": [] }
+{% endschema %}

@@ -1,0 +1,11 @@
+<div class="container section-pad-sm">
+  <div class="section-head"><span class="eyebrow">Flight logs</span><h2>{{ blog.title }}</h2></div>
+  <div class="log-grid">
+    {%- for article in blog.articles -%}
+    <div class="log-card">
+      <p class="log-quote"><a href="{{ article.url }}">{{ article.title }}</a></p>
+      <p class="log-meta">{{ article.published_at | date: '%B %d, %Y' }}</p>
+    </div>
+    {%- endfor -%}
+  </div>
+</div>
