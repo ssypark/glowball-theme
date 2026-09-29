@@ -206,36 +206,163 @@
       rangeBg.appendChild(s);
     }
     if(reduced) return;
-    var colors = ['#5aff8c','#1ee1ff','#ff911e','#ff3cc8'];
-    var styleEl = document.createElement('style');
-    var css = '';
-    var ballCount = 10;
-    for(var j=0;j<ballCount;j++){
-      var b = document.createElement('div');
-      var bsize = 4 + Math.random()*5;
-      var color = colors[j % colors.length];
-      b.className = 'range-ball';
-      b.style.width = bsize+'px';
-      b.style.height = bsize+'px';
-      b.style.background = color;
-      b.style.boxShadow = '0 0 '+(bsize*2)+'px '+color;
-      var startX = 6 + Math.random()*88;
-      var name = 'flight'+j;
-      var duration = (5 + Math.random()*4)+'s';
-      var delay = (Math.random()*6)+'s';
-      css += '@keyframes '+name+'{'
-        + '0%{ left:'+startX+'%; bottom:2%; transform:scale(1.4); opacity:0; }'
-        + '15%{ opacity:1; }'
-        + '90%{ opacity:.7; }'
-        + '100%{ left:'+(46+Math.random()*10)+'%; bottom:62%; transform:scale(.15); opacity:0; }'
-        + '}';
-      b.style.animationName = name;
-      b.style.animationDuration = duration;
-      b.style.animationDelay = delay;
-      rangeBg.appendChild(b);
+    initRangeShots(rangeBg);
+  }
+
+  // Driver shots seen from a hitting bay: real launch speeds, drag, backspin
+  // lift and sidespin, projected in 3D so balls rip off the tee, then slow and
+  // shrink toward the horizon until they're specks among the stars.
+  function initRangeShots(rangeBg){
+    var canvas = document.createElement('canvas');
+    canvas.className = 'range-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    rangeBg.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+
+    var G = 9.81;
+    var K_DRAG = 0.0047;     // 0.5·ρ·Cd·A / m for a golf ball (1/m)
+    var K_LIFT = 0.0034;     // same for backspin (Magnus) lift
+    var SPIN_DECAY = 0.03;   // lift fades a little as spin bleeds off (1/s)
+    var BALL_R = 0.0214;     // m
+    var CAM_H = 1.5;         // eye height in the bay (m)
+    var CAM_BACK = 3.5;      // standing just behind the tee (m)
+    var TRACER_S = 0.45;     // tracer length (s)
+    var FADE_START = 130, FADE_END = 230;  // balls dissolve into the sky with distance (m)
+    var STEP = 1 / 240;
+    var colors = ['#5aff8c', '#1ee1ff', '#ff911e', '#ff3cc8', '#f2f2f0'];
+
+    var W = 0, H = 0, f = 0, horizon = 0;
+    var balls = [];
+    var clock = 0, nextLaunch = 0, lastFrame = 0, rafId = null;
+
+    function resize(){
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = rangeBg.clientWidth; H = rangeBg.clientHeight;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // telephoto framing (~30° vertical FOV) with the horizon low, so the climb fills the sky
+      f = Math.min(H * 1.9, W * 1.6);
+      horizon = H * 0.93;
     }
-    styleEl.textContent = css;
-    document.head.appendChild(styleEl);
+
+    function launch(){
+      var ownBay = Math.random() < 0.3;
+      var x0 = ownBay ? (Math.random() - 0.5) * 0.6 : (Math.random() - 0.5) * 70;
+      var speed = (130 + Math.random() * 40) * 0.44704;          // 130–170 mph
+      var angle = (9 + Math.random() * 8) * Math.PI / 180;        // launch angle
+      var aim = ((Math.random() - 0.5) * 18 - x0 * 0.08) * Math.PI / 180;
+      var vh = speed * Math.cos(angle);
+      balls.push({
+        x: x0, y: 0.03, z: 0,
+        vx: vh * Math.sin(aim), vy: speed * Math.sin(angle), vz: vh * Math.cos(aim),
+        side: (Math.random() - 0.5) * 0.0016,                     // draw / fade
+        t: 0, landed: -1, trail: [],
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    function step(b, dt){
+      var v = Math.sqrt(b.vx*b.vx + b.vy*b.vy + b.vz*b.vz);
+      var h = Math.sqrt(b.vx*b.vx + b.vz*b.vz) || 1e-6;
+      var kl = K_LIFT * Math.exp(-SPIN_DECAY * b.t);
+      var side = b.side * v * v / h;
+      b.vx += (-K_DRAG*v*b.vx - kl*v*b.vy*b.vx/h + side*b.vz) * dt;
+      b.vy += (-G - K_DRAG*v*b.vy + kl*v*h) * dt;
+      b.vz += (-K_DRAG*v*b.vz - kl*v*b.vy*b.vz/h - side*b.vx) * dt;
+      b.x += b.vx*dt; b.y += b.vy*dt; b.z += b.vz*dt; b.t += dt;
+    }
+
+    function project(b){   // b: anything with world x/y/z (m)
+      var d = b.z + CAM_BACK;
+      return {
+        x: W / 2 + f * b.x / d,
+        y: horizon - f * (b.y - CAM_H) / d,
+        r: Math.max(1.7, f * BALL_R * 2.2 / d),
+        d: d
+      };
+    }
+
+    function advance(dt){
+      clock += dt;
+      while(clock >= nextLaunch){
+        launch();
+        nextLaunch = clock + 0.3 + Math.random() * 0.9;
+      }
+      balls.forEach(function(b){
+        if(b.landed >= 0){ b.landed += dt; return; }
+        // record the tracer per physics step so it stays smooth even when frames drop
+        for(var s = 0; s < dt; s += STEP){
+          step(b, Math.min(STEP, dt - s));
+          if(b.y <= 0 && b.vy < 0){ b.y = 0; b.landed = 0; break; }
+          b.trail.push({ x: b.x, y: b.y, z: b.z, t: b.t });   // world coords, so resizes don't kink the tracer
+        }
+      });
+      balls = balls.filter(function(b){ return b.landed < 0.6 && b.z < FADE_END; });
+      var tail = function(b){ return b.t - TRACER_S; };
+      balls.forEach(function(b){ while(b.trail.length > 2 && b.trail[0].t < tail(b)) b.trail.shift(); });
+    }
+
+    function draw(){
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'lighter';
+      balls.forEach(function(b){
+        var p = project(b);
+        var fade = b.landed >= 0 ? 1 - b.landed / 0.6 : 1;
+        fade *= Math.min(1, Math.max(0, (FADE_END - b.z) / (FADE_END - FADE_START)));
+
+        ctx.strokeStyle = b.color;
+        ctx.lineCap = 'round';
+        var pts = b.trail.map(project);
+        for(var i = 1; i < pts.length; i++){
+          var a = pts[i-1], c = pts[i];
+          ctx.globalAlpha = 0.7 * fade * (i / b.trail.length);
+          ctx.lineWidth = Math.max(0.8, p.r * 1.1 * (i / b.trail.length));
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(c.x, c.y); ctx.stroke();
+        }
+
+        ctx.fillStyle = b.color;
+        ctx.globalAlpha = 0.14 * fade;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 0.3 * fade;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 2.4, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = fade;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function frame(now){
+      var dt = Math.min((now - lastFrame) / 1000, 0.05);
+      lastFrame = now;
+      advance(dt);
+      draw();
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function start(){
+      if(rafId) return;
+      lastFrame = performance.now();
+      rafId = requestAnimationFrame(frame);
+    }
+    function stop(){
+      if(rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    // start mid-session so the sky isn't empty on load
+    for(var i = 0; i < 360; i++) advance(1 / 60);
+
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        entries[0].isIntersecting ? start() : stop();
+      }).observe(rangeBg);
+    } else {
+      start();
+    }
   }
 
   function initHeroScroll(){

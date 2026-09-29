@@ -98,7 +98,7 @@ p{ margin:0; }
 }
 .star{ position:absolute; background:#fff; border-radius:50%; animation:twinkle ease-in-out infinite; }
 @keyframes twinkle{ 0%,100%{opacity:.15;} 50%{opacity:.85;} }
-.range-ball{ position:absolute; border-radius:50%; opacity:0; animation-timing-function:linear; animation-iteration-count:infinite; animation-fill-mode:forwards; }
+.range-canvas{ position:absolute; inset:0; display:block; pointer-events:none; }
 
 header.hero{
   position:relative; z-index:1; min-height:640px; height:100vh; max-height:920px;
@@ -402,7 +402,7 @@ footer{ background:var(--graphite); border-top:1px solid var(--line); padding:64
 
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
-  .star, .range-ball, .scroll-cue .line{ animation:none !important; }
+  .star, .scroll-cue .line{ animation:none !important; }
   .product-card, .product-photo img, .add-btn, .btn, .icon-btn, .cart-drawer, .overlay, .mobile-menu, .faq-a{ transition:none !important; }
 }
 
