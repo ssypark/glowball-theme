@@ -107,8 +107,10 @@ header.hero{
 }
 /* keep hero content above the absolutely-positioned starfield */
 .hero-ring, .hero h1, .hero .hero-sub, .hero .hero-copy, .hero-ctas{ position:relative; z-index:1; }
-.hero-ring{ width:46px; height:46px; margin-bottom:22px; opacity:.9; }
-.hero-ring img{ width:100%; height:100%; object-fit:contain; filter:invert(1) drop-shadow(0 0 12px rgba(30,225,255,.55)); }
+.hero-ring{ position:relative; width:clamp(120px, 22vh, 210px); aspect-ratio:1/1; margin-bottom:18px; }
+.hero-ring img{ width:100%; height:100%; object-fit:contain; opacity:.9; filter:invert(1) drop-shadow(0 0 12px rgba(30,225,255,.55)); transition:opacity .4s ease; }
+.hero-logo-canvas{ position:absolute; inset:-10%; width:120% !important; height:120% !important; }
+.hero-ring.is-3d img{ opacity:0; }
 .hero h1{ font-size:clamp(34px,6.4vw,68px); letter-spacing:.03em; font-weight:700; }
 .hero .hero-sub{
   margin-top:16px; font-family:var(--font-mono); font-size:clamp(11px,1.6vw,14px); letter-spacing:.16em;

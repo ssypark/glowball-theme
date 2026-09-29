@@ -1,7 +1,9 @@
 <div id="top"></div>
 <header class="hero" id="hero">
   <div class="range-bg" id="rangeBg"></div>
-  <div class="hero-ring"><img src="{{ 'logo.png' | asset_url }}" alt="GlowBall Industries orbital mark"></div>
+  <div class="hero-ring" id="heroLogo" data-model="{{ 'glowball-logo.glb' | asset_url }}">
+    <img src="{{ 'logo.png' | asset_url }}" alt="GlowBall Industries orbital mark">
+  </div>
   <h1>{{ section.settings.heading | default: 'GLOWBALL INDUSTRIES' }}</h1>
   <p class="hero-sub">{{ section.settings.subheading | default: 'GB-1 MK.II · Certified for night flight' }}</p>
   <p class="hero-copy">{{ section.settings.copy | default: "Light-up golf systems engineered so the round doesn't end when the sun does. Tap it on your club, tee off after dark." }}</p>
@@ -11,6 +13,8 @@
   </div>
   <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
 </header>
+
+<script type="module" src="{{ 'hero-logo.js' | asset_url }}"></script>
 
 {% schema %}
 {
