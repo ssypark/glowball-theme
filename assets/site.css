@@ -426,3 +426,17 @@ footer{ background:var(--graphite); border-top:1px solid var(--line); padding:64
 .search-empty{ color:var(--gray); font-size:14.5px; }
 .rating-count{ margin-left:6px; font-family:var(--font-mono); font-size:11px; color:var(--gray-dim); letter-spacing:0; }
 a.add-btn{ text-decoration:none; }
+
+/* ===== PASSWORD PAGE ===== */
+.password-page{
+  min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:60px 20px;
+  background:radial-gradient(ellipse 70% 55% at 50% 100%, #0c1f16 0%, var(--black) 68%);
+}
+.password-page h1{ font-size:clamp(26px,4.4vw,44px); font-weight:700; margin-top:12px; max-width:720px; }
+.password-message{ margin-top:18px; max-width:480px; color:var(--gray); font-size:15px; line-height:1.6; }
+.password-form{ margin-top:36px; width:100%; max-width:440px; }
+.password-form .field{ margin-bottom:10px; }
+.password-form .form-error{ margin-top:14px; }
+.password-admin{ margin-top:40px; font-family:var(--font-mono); font-size:11px; color:var(--gray-dim); }
+.password-admin a{ color:var(--gray); }
