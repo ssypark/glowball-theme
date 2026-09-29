@@ -16,7 +16,7 @@
     <div class="pdp-grid">
       <div class="pdp-gallery">
         <div class="pdp-gallery-main" id="pdpMainImg">
-          {%- if is_multi -%}
+          {%- if is_multi and product.featured_image == blank -%}
             <div class="multi-swatch" style="background:conic-gradient(from 0deg, var(--white) 0deg 120deg, var(--neon-magenta) 120deg 240deg, var(--glow-green) 240deg 360deg);"></div>
           {%- elsif product.featured_image -%}
             <img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.featured_image.alt | default: product.title }}" width="900" height="900">
