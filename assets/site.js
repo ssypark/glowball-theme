@@ -227,7 +227,7 @@
     var CAM_H = 1.5;         // eye height in the bay (m)
     var CAM_BACK = 3.5;      // standing just behind the tee (m)
     var TRACER_S = 0.45;     // tracer length (s)
-    var FADE_START = 130, FADE_END = 230;  // balls dissolve into the sky with distance (m)
+    var FADE_START = 190, FADE_END = 290;  // long drives dissolve with distance (m)
     var STEP = 1 / 240;
     var colors = ['#5aff8c', '#1ee1ff', '#ff911e', '#ff3cc8', '#f2f2f0'];
 
@@ -251,12 +251,25 @@
       var x0 = ownBay ? (Math.random() - 0.5) * 0.6 : (Math.random() - 0.5) * 70;
       var speed = (130 + Math.random() * 40) * 0.44704;          // 130–170 mph
       var angle = (9 + Math.random() * 8) * Math.PI / 180;        // launch angle
-      var aim = ((Math.random() - 0.5) * 18 - x0 * 0.08) * Math.PI / 180;
+      var side = (Math.random() - 0.5) * 0.0016;                  // draw / fade
       var vh = speed * Math.cos(angle);
+
+      // Fly the shot once aimed straight downrange to find its carry and curve.
+      // The forces don't care which way the ball is pointed, so rotating the aim
+      // rotates the whole flight path; aim it so it lands in the middle third
+      // of the screen (most shots), or just outside it (the rest).
+      var probe = { x: 0, y: 0.03, z: 0, vx: 0, vy: speed * Math.sin(angle), vz: vh, side: side, t: 0 };
+      while(!(probe.y <= 0 && probe.vy < 0) && probe.t < 12) step(probe, 1 / 60);
+      var reach = Math.sqrt(probe.x * probe.x + probe.z * probe.z);
+      var spread = Math.random() < 0.8 ? 1 : 1.7;
+      var targetX = (Math.random() * 2 - 1) * spread * (W / 6) * (reach + CAM_BACK) / f;
+      var ratio = Math.max(-1, Math.min(1, (targetX - x0) / reach));
+      var aim = Math.asin(ratio) - Math.atan2(probe.x, probe.z);
+
       balls.push({
         x: x0, y: 0.03, z: 0,
         vx: vh * Math.sin(aim), vy: speed * Math.sin(angle), vz: vh * Math.cos(aim),
-        side: (Math.random() - 0.5) * 0.0016,                     // draw / fade
+        side: side,
         t: 0, landed: -1, trail: [],
         color: colors[Math.floor(Math.random() * colors.length)]
       });
