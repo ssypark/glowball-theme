@@ -227,7 +227,7 @@
     var CAM_H = 1.5;         // eye height in the bay (m)
     var CAM_BACK = 3.5;      // standing just behind the tee (m)
     var TRACER_S = 0.45;     // tracer length (s)
-    var FADE_START = 190, FADE_END = 290;  // long drives dissolve with distance (m)
+    var FADE_START = 260, FADE_END = 340;  // only the very longest drives dissolve before dropping out of frame (m)
     var STEP = 1 / 240;
     var colors = ['#5aff8c', '#1ee1ff', '#ff911e', '#ff3cc8', '#f2f2f0'];
 
@@ -241,9 +241,10 @@
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
       canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // telephoto framing (~30° vertical FOV) with the horizon low, so the climb fills the sky
-      f = Math.min(H * 1.9, W * 1.6);
-      horizon = H * 0.93;
+      // telephoto framing (~25° vertical FOV) with the horizon just below the hero,
+      // so the climb fills the sky and balls drop out of frame before they land
+      f = H * 2.3;
+      horizon = H * 1.08;
     }
 
     function launch(){
